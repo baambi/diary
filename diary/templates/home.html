@@ -67,7 +67,9 @@
 
         <div class="card-block p-2" style="background:#212121;">
           {% if post.title %} 
-          <span style="text-transform:uppercase;font-weight:700;font-size:15px;letter-spacing:1.5px;color:#FE3C72;">{{ post.title }}</span> <br>
+          <a href="{{ url_for('post', post_id=post.id) }}" style="text-decoration:none;">
+            <span style="text-transform:uppercase;font-weight:700;font-size:15px;letter-spacing:1.5px;color:#61f7d4;">{{ post.title }}</span> <br>
+          </a>
           {% endif %}
 
            <!--<a class="btn btn-warning btn-sm m-1" href="{{url_for('update_post', post_id=post.id)}}">✏edit</a>
