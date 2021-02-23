@@ -16,9 +16,17 @@
           <img src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}" alt="dp" class="profile-thumbnail">
           <div class="profile-name">
               <h3 data-toggle="popover"><a href="#" style="color:#fff;">  {{post.author.username}}
-               {% if post.author.username in ["harun" , "bambi"] %}<img src="https://image.flaticon.com/icons/svg/1271/1271380.svg" style="width:17px;height:17px;margin-left: -5px;">{% endif %}
+               {% if post.author.username in ["harun" , "bambi"] %}<img src="https://image.flaticon.com/icons/svg/1271/1271380.svg" style="width:17px;height:17px;">{% endif %}
              </a> {% if post.author != current_user and not current_user.is_following(post.author) %}<a class="pt-2 pl-2" href="{{ url_for('follow', username=post.author.username) }}" style="font-size:12px;text-decoration:none;">· Follow</a>{% endif %}</h3>
-             <small>@{{post.author.email.split("@")[0] | lower}}</small>
+             <!--<small>@{{post.author.email.split("@")[0] | lower}}</small>-->
+             <!--('%a, %b %d, %Y at %H:%M:%S')-->
+             {% set words = post.content.split() %}
+            <small>
+            {{post.date_posted.strftime('%a %H:%M · %d %b %Y')}}
+            {% if words | count > 60 %}
+             · {{words | count}} words
+            {% endif %}
+            </small> 
           </div>
           <div class="follow-btn"> 
               <a class="btn btn-warning btn-sm m-1" href="{{url_for('update_post', post_id=post.id)}}">✏edit</a>
@@ -34,17 +42,9 @@
           <p>
             {%if post.image%}<small>{{post.author.email.split("@")[0] | lower}}</small>{%endif%}
             {{post.content| safe | urlize(40, target='_blank')}}
-          </p>
+          </p>              
 
-          {% set words = post.content.split() %}
-          <a class="btn btn-sm btn-outline-dark p-1 ml-1 mt-2">{{post.date_posted.strftime('%a %H:%M - %d / %b / %Y')}}</a> 
-          <!--('%a, %b %d, %Y at %H:%M:%S')-->
-          {% if words | count > 60 %}
-          <a class="btn btn-sm btn-outline-dark p-1 ml-1 mt-2">{{words | count}} words</a>
-          {% endif %}
-                            
-
-          <div class="comments mt-2">
+          <div class="comments">
             <form method="POST" action="" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
               <div class="row">
