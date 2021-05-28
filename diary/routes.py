@@ -39,9 +39,10 @@ def home():
 		db.session.commit()
 		flash('Your Post Has been Created!', 'info')
 		return redirect(url_for('home'))
+	page = request.args.get('page', 1, type=int)
+	posts = Post.query.filter_by(author=current_user).order_by(Post.date_posted.desc()).paginate(per_page=20, page=page)
 	hour = datetime.now().hour
 	greeting = "Good morning" if 5<=hour<12 else "Good afternoon" if hour<18 else "Good evening"
-	posts = Post.query.filter_by(author=current_user).order_by(Post.date_posted.desc())
 	return render_template('home.html', posts=posts, title=current_user.username.title() + "'s Diary", form=form, greeting=greeting)
 
 
